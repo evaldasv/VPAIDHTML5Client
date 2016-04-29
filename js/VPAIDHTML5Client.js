@@ -217,13 +217,13 @@ function $throwIfDestroyed() {
 }
 
 function getOrigin() {
-    if( window.location.origin ) {
+    if( window.location.origin && window.location.origin !== 'null' ) {
         return window.location.origin;
     }
     else {
-        return window.location.protocol + "//" +
-            window.location.hostname +
-            (window.location.port ? ':' + window.location.port: '');
+        return window.top.location.protocol + "//" +
+            window.top.location.hostname +
+            (window.top.location.port ? ':' + window.top.location.port: '');
     }
 }
 
