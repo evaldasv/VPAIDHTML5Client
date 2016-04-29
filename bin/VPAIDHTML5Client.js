@@ -736,13 +736,13 @@ function $throwIfDestroyed() {
 }
 
 function getOrigin() {
-    if( window.location.origin ) {
+    if( window.location.origin && window.location.origin !== 'null' ) {
         return window.location.origin;
     }
     else {
-        return window.location.protocol + "//" +
-            window.location.hostname +
-            (window.location.port ? ':' + window.location.port: '');
+        return window.top.location.protocol + "//" +
+            window.top.location.hostname +
+            (window.top.location.port ? ':' + window.top.location.port: '');
     }
 }
 
@@ -896,7 +896,7 @@ function createElementInEl(parent, tagName, id) {
  * @param {object} data
  */
 function createIframeWithContent(parent, template, data) {
-    var iframe = createIframe(parent);
+    var iframe = createIframe(parent, null, data.zIndex);
     if (!setIframeContent(iframe, simpleTemplate(template, data))) return;
     return iframe;
 }
@@ -907,7 +907,7 @@ function createIframeWithContent(parent, template, data) {
  * @param {HTMLElement} parent
  * @param {string} url
  */
-function createIframe(parent, url) {
+function createIframe(parent, url, zIndex) {
     var nEl = document.createElement('iframe');
     nEl.src = url || 'about:blank';
     nEl.marginWidth = '0';
@@ -921,6 +921,11 @@ function createIframe(parent, url) {
     nEl.style.margin = '0px';
     nEl.style.padding = '0px';
     nEl.style.border = 'none';
+
+    if(zIndex){
+        nEl.style.zIndex = zIndex;
+    }
+
     nEl.setAttribute('SCROLLING','NO');
     parent.innerHTML = '';
     parent.appendChild(nEl);
